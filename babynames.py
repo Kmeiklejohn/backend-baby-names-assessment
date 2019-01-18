@@ -39,15 +39,37 @@ Suggested milestones for incremental development:
 """
 
 
-def extract_names(filename):
+def extract_names(filenames):
     """
     Given a file name for baby.html, returns a list starting with the year string
     followed by the name-rank strings in alphabetical order.
     ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
     """
-    # +++your code here+++
-    return
+    
+    for file_name in filenames:
 
+        male_summary = []
+        female_summary = []
+        name_list = []
+        with open(file_name,'r') as file:
+            text = file.read()
+        match_name = re.findall(r'<td>(\d+)</td><td>(\w+)</td>\<td>(\w+)</td>', text)
+        #match_year = re.findall(r'Popularity\sin\s(\d\d\d\d)', text)
+        for x,y,z in match_name:
+            
+            male_summary.append([y] + [x])
+            female_summary.append([z] + [x])
+        name_list = male_summary + female_summary 
+    return name_list   
+
+def summary_write(filenames):
+    """writing to a summary file"""
+    summary_names = extract_names(filenames)
+    
+    with open("baby*.html.summary", 'a') as write_file:
+        for name, number in summary_names:
+            name_list = number + " " + name + " "
+            write_file.write(name_list+"\n")
 
 def main():
     # This command-line parsing code is provided.
@@ -62,13 +84,13 @@ def main():
     if not args:
         parser.print_usage()
         sys.exit(1)
-
-    file_list = args.files
+    extract_names(args.files)
 
     # option flag
     create_summary = args.summaryfile
-
-    # +++your code here+++
+    if create_summary:
+        summary_write(args.files)
+    # +++your code here+++    
     # For each filename, get the names, then either print the text output
     # or write it to a summary file
 
