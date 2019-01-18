@@ -63,6 +63,7 @@ def extract_names(filenames):
     return name_list   
 
 def summary_write(filenames):
+    """writing to a summary file"""
     summary_names = extract_names(filenames)
     
     with open("baby*.html.summary", 'a') as write_file:
